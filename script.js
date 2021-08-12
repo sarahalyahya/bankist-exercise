@@ -160,10 +160,28 @@ const createUsernames = function (accounts) {
   });
 };
 
+const startLogOutTimer = function () {
+  let tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = time % 60;
+    labelTimer.textContent = `${min}:${sec}`;
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = `Log in to get started`;
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  };
+  let time = 100;
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
+
 createUsernames(accounts);
 
 // Event Handlers
-let currentAccount;
+let currentAccount, timer;
 
 const updateUI = function (account) {
   //Display movements
@@ -214,6 +232,8 @@ btnLogin.addEventListener('click', function (e) {
     //clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
     updateUI(currentAccount);
   }
 });
@@ -239,6 +259,8 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAccount.movementsDates.push(new Date().toISOString());
 
     updateUI(currentAccount);
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -256,6 +278,8 @@ btnLoan.addEventListener('click', function (e) {
     }, 2500);
   }
   inputLoanAmount.value = '';
+  clearInterval(timer);
+  timer = startLogOutTimer();
 });
 
 btnClose.addEventListener('click', function (e) {
