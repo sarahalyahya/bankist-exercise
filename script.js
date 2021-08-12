@@ -1,14 +1,8 @@
 'use strict';
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
-
-// Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
   movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
-  interestRate: 1.2, // %
+  interestRate: 1.2,
   pin: 1111,
 
   movementsDates: [
@@ -22,7 +16,7 @@ const account1 = {
     '2021-08-11T10:51:36.790Z',
   ],
   currency: 'EUR',
-  locale: 'pt-PT', // de-DE
+  locale: 'pt-PT',
 };
 
 const account2 = {
@@ -47,7 +41,6 @@ const account2 = {
 
 const accounts = [account1, account2];
 
-// Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -180,17 +173,13 @@ const startLogOutTimer = function () {
 
 createUsernames(accounts);
 
-// Event Handlers
 let currentAccount, timer;
 
 const updateUI = function (account) {
-  //Display movements
   displayMovements(account);
 
-  //display balance
   calcDisplayBalance(account);
 
-  //display summary
   calcDisplaySummary(account);
 };
 
@@ -200,13 +189,11 @@ btnLogin.addEventListener('click', function (e) {
     acc => acc.username === inputLoginUsername.value
   );
   if (currentAccount?.pin === +inputLoginPin.value) {
-    //Display UI and Message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
 
-    //Create current date and time
     const now = new Date();
     const options = {
       hour: 'numeric',
@@ -220,16 +207,6 @@ btnLogin.addEventListener('click', function (e) {
       options
     ).format(now);
 
-    //get from browser
-
-    // const day = `${now.getDate()}`.padStart(2, 0);
-    // const month = `${now.getMonth() + 1}`.padStart(2, 0);
-    // const year = now.getFullYear();
-    // const hour = `${now.getHours()}`.padStart(2, 0);
-    // const min = `${now.getMinutes()}`.padStart(2, 0);
-    // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
-
-    //clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
     if (timer) clearInterval(timer);
@@ -292,10 +269,8 @@ btnClose.addEventListener('click', function (e) {
       account => account.username === currentAccount.username
     );
 
-    //Delete account
     accounts.splice(index, 1);
 
-    //Hide UI
     containerApp.style.opacity = 0;
   }
   inputCloseUsername.value = inputClosePin.value = '';
